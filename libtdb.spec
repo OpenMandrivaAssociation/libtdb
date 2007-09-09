@@ -1,10 +1,11 @@
 %define	major 1
-%define libname	%mklibname tdb %{major}
+%define libname %mklibname tdb %{major}
+%define develname %mklibname tdb -d
 
 Summary:	TDB is a Trivial Database
 Name:		libtdb
 Version:	1.0.6
-Release:	%mkrel 8
+Release:	%mkrel 9
 License:	GPL
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/tdb
@@ -35,13 +36,14 @@ and BSD's DB except that it allows multiple simultaneous writers
 and uses locking internally to keep writers from trampling on each
 other. TDB is also extremely small.
 
-%package -n	%{libname}-devel
+%package -n	%{develname}
 Summary:	Headers files of libtdb library
 Group:		Development/C
 Requires:	%{libname} = %{version}
 Provides:	libtdb-devel = %{version}-%{release}
+Obsoletes:	%{mklibname tdb 1 -d}
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 TDB is a Trivial Database. In concept, it is very much like GDBM,
 and BSD's DB except that it allows multiple simultaneous writers
 and uses locking internally to keep writers from trampling on each
@@ -95,7 +97,7 @@ chrpath -d %{buildroot}%{_bindir}/tdbtool
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO
 %{_libdir}/lib*.so.*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr (-,root,root)
 %{_libdir}/*.a
 %{_libdir}/*.so
@@ -111,5 +113,3 @@ chrpath -d %{buildroot}%{_bindir}/tdbtool
 %{_bindir}/tdbspeed
 %{_bindir}/tdbtest
 %{_bindir}/tdbtorture
-
-
