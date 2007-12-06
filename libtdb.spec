@@ -1,23 +1,20 @@
 %define	major 1
 %define libname %mklibname tdb %{major}
 %define develname %mklibname tdb -d
+%define	svn	20071206
 
 Summary:	TDB is a Trivial Database
 Name:		libtdb
-Version:	1.0.6
-Release:	%mkrel 9
+Version:	1.1.1
+Release:	%mkrel 0.%{svn}.1
 License:	GPL
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/tdb
-Source0:	tdb-%{version}.tar.bz2
-Patch0:		tdb-1.0.6-strings.patch
-# http://sourceforge.net/tracker/index.php?func=detail&aid=646773&group_id=9569&atid=309569
-Patch1:		tdb-1.0.6-646773.diff
+Source0:	tdb-%{version}-svn%{svn}.tar.lzma
+Patch0:		tdb-1.1.1-add-missing-headers.patch
 BuildRequires:	gdbm-devel
 BuildRequires:	autoconf2.5
 BuildRequires:	libtool
-BuildRequires:	chrpath
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 
 %description
 TDB is a Trivial Database. In concept, it is very much like GDBM, 
@@ -59,57 +56,45 @@ Conflicts:	samba-common
 Utilities using the %{libname} library.
 
 %prep
-
 %setup -q -n tdb-%{version}
-%patch0 -p0
-%patch1 -p1
+%patch0 -p1 -b .addheader
 
 %build
-
+./autogen.sh
 %configure2_5x
-
-%make
+%make all bin/tdbtest bin/tdbtorture
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %makeinstall_std
-
+ln -s libtdb.so.%{major} %{buildroot}%{_libdir}/libtdb.so
 # install extras
-install -m755 tdbiterate %{buildroot}%{_bindir}/
-install -m755 tdbspeed %{buildroot}%{_bindir}/
-install -m755 tdbtest %{buildroot}%{_bindir}/
-install -m755 tdbtorture %{buildroot}%{_bindir}/
-
-# nuke rpath
-chrpath -d %{buildroot}%{_bindir}/tdbdump
-chrpath -d %{buildroot}%{_bindir}/tdbtool
+install -m755 bin/tdbtest %{buildroot}%{_bindir}/
+install -m755 bin/tdbtorture %{buildroot}%{_bindir}/
 
 %post -n %{libname} -p /sbin/ldconfig
-
 %postun -n %{libname} -p /sbin/ldconfig
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr (-,root,root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
+%doc docs/README
 %{_libdir}/lib*.so.*
 
 %files -n %{develname}
 %defattr (-,root,root)
 %{_libdir}/*.a
 %{_libdir}/*.so
-%{_libdir}/*.la
 %{_includedir}/*.h
-%{_mandir}/man3/tdb*
+%{_libdir}/pkgconfig/tdb.pc
 
 %files -n tdb-utils
 %defattr (-,root,root)
 %{_bindir}/tdbdump
 %{_bindir}/tdbtool
-%{_bindir}/tdbiterate
-%{_bindir}/tdbspeed
+%{_bindir}/tdbbackup
 %{_bindir}/tdbtest
 %{_bindir}/tdbtorture
