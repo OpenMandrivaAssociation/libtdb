@@ -9,6 +9,7 @@ Version:	1.1.1
 Release:	%mkrel 0.%{svn}.1
 License:	GPL
 Group:		System/Libraries
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://sourceforge.net/projects/tdb
 Source0:	tdb-%{version}-svn%{svn}.tar.lzma
 Patch0:		tdb-1.1.1-add-missing-headers.patch
