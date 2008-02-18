@@ -3,7 +3,7 @@
 %define develname %mklibname tdb -d
 %define	svn	20071206
 
-Summary:	TDB is a Trivial Database
+Summary:	Trivial Database
 Name:		libtdb
 Version:	1.1.1
 Release:	%mkrel 0.%{svn}.1
@@ -24,7 +24,7 @@ and uses locking internally to keep writers from trampling on
 each other. TDB is also extremely small.
 
 %package -n	%{libname}
-Summary:	TDB is a Trivial Database
+Summary:	Trivial Database
 Group:		System/Libraries
 Provides:	%{name} = %{version}-%{release}
 
