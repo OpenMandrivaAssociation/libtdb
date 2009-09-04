@@ -6,7 +6,7 @@
 Summary:	Trivial Database
 Name:		libtdb
 Version:	1.1.1
-Release:	%mkrel 0.%{svn}.2
+Release:	%mkrel 0.%{svn}.3
 License:	GPL
 Group:		System/Libraries
 URL:		http://sourceforge.net/projects/tdb
